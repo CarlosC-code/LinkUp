@@ -1,0 +1,178 @@
+﻿@model LinkUp.Core.Application.ViewModels.Social.FriendRequestsIndexViewModel
+
+@{
+    ViewData["Title"] = "Solicitudes de amistad";
+}
+
+<style>
+    body {
+        background-color: #212121;
+        color: #e0e0e0;
+    }
+
+    .dark-card {
+        background-color: #2a2a2a;
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: 0 0 25px rgba(0,0,0,0.4);
+    }
+
+    .list-group-item {
+        background-color: #2f2f2f;
+        border: 1px solid #3a3a3a;
+        color: #e0e0e0;
+    }
+
+        .list-group-item:hover {
+            background-color: #383838;
+            transition: 0.2s ease;
+        }
+
+    .text-muted {
+        color: #aaaaaa !important;
+    }
+
+    .btn-primary {
+        background-color: #10a37f;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0d8f6f;
+        }
+
+    .btn-success {
+        background-color: #1f8f6a;
+        border: none;
+    }
+
+        .btn-success:hover {
+            background-color: #187a5b;
+        }
+
+    .btn-danger {
+        border: none;
+    }
+
+    .btn-outline-danger {
+        border-color: #b02a37;
+        color: #ff6b6b;
+    }
+
+        .btn-outline-danger:hover {
+            background-color: #b02a37;
+            color: white;
+        }
+
+    .badge {
+        font-size: 0.75rem;
+    }
+
+    h2, h4 {
+        font-weight: 600;
+    }
+</style>
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Solicitudes de amistad</h2>
+
+        <a asp-action="Create" class="btn btn-primary">
+            Nueva solicitud
+        </a>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- RECIBIDAS -->
+        <div class="col-md-6">
+            <div class="dark-card">
+                <h4 class="mb-3">
+                    Pendientes de responder (@Model.PendingReceived.Count)
+                </h4>
+
+                <ul class="list-group">
+                    @foreach (var r in Model.PendingReceived)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>@r.SenderUserName</strong>
+                                <div class="small text-muted">
+                                    @r.MutualFriends amigos en común · @r.SentAtUtc.ToLocalTime()
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2">
+
+                                <a asp-action="ConfirmAccept"
+                                   asp-route-id="@r.RequestId"
+                                   class="btn btn-sm btn-success">
+                                    Aceptar
+                                </a>
+
+                                <a asp-action="ConfirmReject"
+                                   asp-route-id="@r.RequestId"
+                                   class="btn btn-sm btn-danger">
+                                    Rechazar
+                                </a>
+
+                            </div>
+                        </li>
+                    }
+
+                    @if (!Model.PendingReceived.Any())
+                    {
+                        <li class="list-group-item text-muted">
+                            No hay solicitudes pendientes.
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <!-- ENVIADAS -->
+        <div class="col-md-6">
+            <div class="dark-card">
+                <h4 class="mb-3">
+                    Solicitudes enviadas
+                </h4>
+
+                <ul class="list-group">
+                    @foreach (var r in Model.Sent)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>@r.ReceiverUserName</strong>
+                                <div class="small text-muted">
+                                    @r.MutualFriends amigos en común
+                                </div>
+
+                                <span class="badge bg-secondary mt-1">
+                                    @r.StatusText
+                                </span>
+                            </div>
+
+                            <div>
+                                <a asp-action="ConfirmDelete"
+                                   asp-route-id="@r.RequestId"
+                                   class="btn btn-sm btn-outline-danger">
+                                    Eliminar
+                                </a>
+                            </div>
+                        </li>
+                    }
+
+                    @if (!Model.Sent.Any())
+                    {
+                        <li class="list-group-item text-muted">
+                            No has enviado solicitudes.
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</div>

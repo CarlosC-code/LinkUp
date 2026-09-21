@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Aceptar solicitud";
+}
+
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center"
+     style="background:#0f172a;">
+
+    <div class="col-12 col-md-8 col-lg-5">
+
+        <div class="card border-0 shadow-lg rounded-4"
+             style="background:#111827; border:1px solid #312e81;">
+
+            <div class="card-body p-5 text-light text-center">
+
+                <!-- Icono -->
+                <div class="mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                         style="width:90px; height:90px; background:rgba(147,51,234,0.15);">
+                        <i class="bi bi-person-check-fill fs-2"
+                           style="color:#c084fc;"></i>
+                    </div>
+                </div>
+
+                <!-- Mensaje -->
+                <h4 class="fw-bold mb-4">
+                    ¿Aceptar la solicitud de
+                    <span style="color:#c084fc;">
+                        @ViewBag.SenderName
+                    </span>?
+                </h4>
+
+                <!-- Botones -->
+                <div class="d-grid gap-3">
+
+                    <!-- Formulario Confirmar -->
+                    <form asp-action="AcceptConfirmed" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@ViewBag.RequestId" />
+
+                        <button type="submit"
+                                class="btn fw-semibold rounded-3 py-2"
+                                style="background:linear-gradient(135deg,#9333ea,#7e22ce);
+                                       color:white;
+                                       border:none;
+                                       box-shadow:0 0 15px rgba(147,51,234,0.5);
+                                       transition:0.3s;">
+                            <i class="bi bi-check-circle-fill me-1"></i>
+                            Aceptar solicitud
+                        </button>
+                    </form>
+
+                    <!-- Cancelar -->
+                    <a asp-action="Index"
+                       class="btn fw-semibold rounded-3 py-2"
+                       style="background:#1f2937;
+                              color:#e5e7eb;
+                              border:1px solid #312e81;">
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

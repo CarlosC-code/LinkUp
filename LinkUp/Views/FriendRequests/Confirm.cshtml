@@ -1,0 +1,84 @@
+﻿@* @model LinkUp.Core.Application.Dtos.FriendRequest.FriendRequestDto
+
+@{
+    var action = ViewBag.Action as string;
+    var label = action == "Accept" ? "aceptar"
+               : action == "Reject" ? "rechazar"
+               : "eliminar";
+
+    ViewData["Title"] = $"Confirmar {label} solicitud";
+}
+
+<h4>Confirmar @label solicitud</h4>
+
+<p>
+    ¿Está seguro que desea @label la solicitud del usuario
+    <strong>@Model.FromUserId</strong>?
+</p>
+
+@if (action == "Accept")
+{
+    <form asp-controller="FriendRequests"
+          asp-action="Accept"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="id" value="@Model.Id" />
+
+        <button type="submit" class="btn btn-success me-1">
+            Aceptar
+        </button>
+
+        <a asp-controller="FriendRequests"
+           asp-action="Index"
+           class="btn btn-secondary">
+            Cancelar
+        </a>
+
+    </form>
+}
+else if (action == "Reject")
+{
+    <form asp-controller="FriendRequests"
+          asp-action="Reject"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="id" value="@Model.Id" />
+
+        <button type="submit" class="btn btn-warning me-1">
+            Rechazar
+        </button>
+
+        <a asp-controller="FriendRequests"
+           asp-action="Index"
+           class="btn btn-secondary">
+            Cancelar
+        </a>
+
+    </form>
+}
+else
+{
+    <form asp-controller="FriendRequests"
+          asp-action="Delete"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="id" value="@Model.Id" />
+
+        <button type="submit" class="btn btn-danger me-1">
+            Eliminar
+        </button>
+
+        <a asp-controller="FriendRequests"
+           asp-action="Index"
+           class="btn btn-secondary">
+            Cancelar
+        </a>
+
+    </form>
+} *@

@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LinkUp</title>
+    <script type="importmap"></script>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LinkUp.styles.css" asp-append-version="true" />
+</head>
+
+<body style="background:#0f172a; color:#e5e7eb;">
+
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark shadow-sm mb-4"
+             style="background:#111827; border-bottom:1px solid #1f2937;">
+
+            <div class="container-fluid">
+
+                <a class="navbar-brand fw-bold"
+                   style="color:#c084fc; letter-spacing:1px;"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index">
+
+                    <i class="bi bi-lightning-charge-fill me-1"></i>LinkUp
+                </a>
+
+                <button class="navbar-toggler border-0"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                        style="background:#1f2937;">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                    <!-- IZQUIERDA -->
+                    <ul class="navbar-nav flex-grow-1">
+
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 rounded-3"
+                                   style="color:#e5e7eb; transition:0.3s;"
+                                   asp-area=""
+                                   asp-controller="Home"
+                                   asp-action="Index">
+                                    Home
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 rounded-3"
+                                   style="color:#e5e7eb; transition:0.3s;"
+                                   asp-controller="Friends"
+                                   asp-action="Index">
+                                    Amigos
+                                </a>
+                            </li>
+
+                            <li class="nav-item d-flex align-items-center">
+                                <a class="nav-link px-3 rounded-3"
+                                   style="color:#e5e7eb; transition:0.3s;"
+                                   asp-controller="FriendRequests"
+                                   asp-action="Index">
+                                    Solicitudes
+                                </a>
+
+                                @if (ViewBag.PendingRequestsCount != null
+                                                            && (int)ViewBag.PendingRequestsCount > 0)
+                                {
+                                    <span class="badge ms-1"
+                                          style="background:#9333ea; box-shadow:0 0 10px rgba(147,51,234,0.6);">
+                                        @ViewBag.PendingRequestsCount
+                                    </span>
+                                }
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 rounded-3"
+                                   style="color:#e5e7eb; transition:0.3s;"
+                                   asp-controller="Battleship"
+                                   asp-action="Index">
+                                    Battleship
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link px-3 rounded-3"
+                                   style="color:#e5e7eb; transition:0.3s;"
+                                   asp-controller="Profile"
+                                   asp-action="Index">
+                                    Mi Perfil
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 rounded-3"
+                                   style="color:#e5e7eb;"
+                                   asp-area=""
+                                   asp-controller="Home"
+                                   asp-action="Index">
+                                    Home
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+
+                    <!-- DERECHA -->
+                    <ul class="navbar-nav">
+
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link px-3 rounded-3"
+                                   style="color:#f87171; transition:0.3s;"
+                                   asp-controller="Login"
+                                   asp-action="Logout">
+                                    Salir
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-4">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="text-center py-4 mt-5"
+            style="border-top:1px solid #1f2937; background:#111827; color:#9ca3af;">
+
+        <div class="container">
+            &copy; 2026 - <span style="color:#c084fc;">LinkUp</span> -
+            <a style="color:#a855f7; text-decoration:none;"
+               asp-area=""
+               asp-controller="Home"
+               asp-action="Privacy">
+                Privacy
+            </a>
+        </div>
+
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,261 @@
+﻿@* @model PostViewModel *@
+@* @using LinkUp.Core.Domain.Common.Enums
+
+@{
+    string avatar = Url.Content("~/images/avatar-default.png");
+    bool isOwner = (User.Identity?.Name ?? "") == Model.UserId;
+
+    string? GetYouTubeEmbed(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url)) return null;
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri)) return null;
+
+        var host = uri.Host.ToLowerInvariant();
+
+        if (host.Contains("youtube.com"))
+        {
+            var q = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            var v = q.Get("v");
+            return string.IsNullOrWhiteSpace(v) ? null : $"https://www.youtube.com/embed/{v}";
+        }
+
+        if (host.Contains("youtu.be"))
+        {
+            return uri.Segments.Length >= 2
+                ? $"https://www.youtube.com/embed/{uri.Segments[1]}"
+                : null;
+        }
+
+        return null;
+    }
+}
+
+<div class="post-card p-3 mb-3">
+
+    <div class="post-header mb-2 d-flex align-items-center gap-2">
+
+        <img src="@avatar" alt="avatar" class="avatar-32" />
+
+        <div>
+            <div><strong>@Model.UserId</strong></div>
+            <small class="text-muted">@Model.PublishedAtUtc.ToLocalTime()</small>
+        </div>
+
+        <div class="ms-auto">
+            @if (isOwner)
+            {
+                <a asp-controller="Posts"
+                   asp-action="Edit"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-sm btn-outline-secondary me-1">
+                    Editar
+                </a>
+
+                <a asp-controller="Posts"
+                   asp-action="Delete"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-sm btn-outline-danger">
+                    Eliminar
+                </a>
+            }
+        </div>
+
+    </div>
+
+    <div class="post-body mb-2">
+
+        <p class="mb-2">@Model.Content</p>
+
+        @if (Model.MediaType == MediaType.Image && !string.IsNullOrWhiteSpace(Model.ImagePath))
+        {
+            <img src="@Model.ImagePath"
+                 class="img-fluid rounded mb-2"
+                 alt="Imagen de publicación" />
+        }
+        else if (Model.MediaType == MediaType.YouTube && !string.IsNullOrWhiteSpace(Model.YouTubeUrl))
+        {
+            var embed = GetYouTubeEmbed(Model.YouTubeUrl);
+
+            if (!string.IsNullOrWhiteSpace(embed))
+            {
+                <div class="ratio ratio-16x9 mb-2">
+                    <iframe src="@embed"
+                            frameborder="0"
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            }
+        }
+
+    </div>
+
+    <div class="post-actions mb-2">
+
+        <form asp-controller="Reactions"
+              asp-action="Toggle"
+              method="post"
+              class="d-inline">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="postId" value="@Model.Id" />
+
+            <button class="btn btn-sm btn-outline-primary me-1"
+                    name="type"
+                    value="@ReactionType.Like">
+                Me gusta
+            </button>
+
+            <button class="btn btn-sm btn-outline-secondary"
+                    name="type"
+                    value="@ReactionType.Dislike">
+                No me gusta
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="post-comments">
+
+        <h6>Comentarios</h6>
+
+        <form asp-controller="Comments"
+              asp-action="Create"
+              method="post"
+              class="mb-2">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" name="PostId" value="@Model.Id" />
+            <input type="hidden" name="ParentCommentId" value="" />
+
+            <div class="d-flex gap-2">
+
+                <img src="@avatar" class="avatar-24" alt="yo" />
+
+                <textarea name="Text"
+                          class="form-control"
+                          rows="1"
+                          placeholder="Escribe un comentario...">
+                </textarea>
+
+                <button class="btn btn-sm btn-primary">
+                    Comentar
+                </button>
+
+            </div>
+
+        </form>
+
+        @if (Model.Comments?.Any() == true)
+        {
+            foreach (var c in Model.Comments)
+            {
+                <div class="comment d-flex">
+
+                    <img src="@avatar" class="avatar-24 me-2" />
+
+                    <div>
+
+                        <div><strong>@c.UserId</strong></div>
+
+                        <div>@c.Text</div>
+
+                        <div class="mt-1">
+
+                            <form asp-controller="Comments"
+                                  asp-action="Create"
+                                  method="post"
+                                  class="d-inline">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden" name="PostId" value="@Model.Id" />
+                                <input type="hidden" name="ParentCommentId" value="@c.Id" />
+
+                                <input type="text"
+                                       name="Text"
+                                       class="form-control form-control-sm d-inline-block"
+                                       style="width:260px"
+                                       placeholder="Responder..." />
+
+                                <button class="btn btn-sm btn-outline-primary">
+                                    Responder
+                                </button>
+
+                            </form>
+
+                            @if ((User.Identity?.Name ?? "") == c.UserId)
+                            {
+                                <form asp-controller="Comments"
+                                      asp-action="Delete"
+                                      method="post"
+                                      class="d-inline ms-2">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@c.Id" />
+
+                                    <button class="btn btn-sm btn-link text-danger">
+                                        Eliminar
+                                    </button>
+
+                                </form>
+                            }
+
+                        </div>
+
+                        @if (c.Replies?.Any() == true)
+                        {
+                            foreach (var r in c.Replies)
+                            {
+                                <div class="reply d-flex mt-2">
+
+                                    <img src="@avatar" class="avatar-24 me-2" />
+
+                                    <div>
+
+                                        <div><strong>@r.UserId</strong></div>
+
+                                        <div>@r.Text</div>
+
+                                        @if ((User.Identity?.Name ?? "") == r.UserId)
+                                        {
+                                            <form asp-controller="Comments"
+                                                  asp-action="Delete"
+                                                  method="post"
+                                                  class="d-inline mt-1">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@r.Id" />
+
+                                                <button class="btn btn-sm btn-link text-danger">
+                                                    Eliminar
+                                                </button>
+
+                                            </form>
+                                        }
+
+                                    </div>
+
+                                </div>
+                            }
+                        }
+
+                    </div>
+
+                </div>
+
+                <hr />
+            }
+        }
+
+    </div>
+
+</div> *@

@@ -1,0 +1,126 @@
+﻿@model LinkUp.Core.Application.ViewModels.Social.PostCreateViewModel
+@using LinkUp.Core.Domain.Common.Enums
+
+<style>
+    .dark-post-card {
+        background-color: #2a2a2a;
+        border-radius: 16px;
+        border: 1px solid #3a3a3a;
+        box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        color: #e0e0e0;
+    }
+
+        .dark-post-card .card-header {
+            background-color: #242424;
+            border-bottom: 1px solid #3a3a3a;
+            font-weight: 600;
+        }
+
+        .dark-post-card .form-control,
+        .dark-post-card .form-select {
+            background-color: #333;
+            border: 1px solid #444;
+            color: #fff;
+        }
+
+            .dark-post-card .form-control:focus,
+            .dark-post-card .form-select:focus {
+                background-color: #333;
+                color: #fff;
+                border-color: #666;
+                box-shadow: none;
+            }
+
+        .dark-post-card textarea {
+            resize: none;
+        }
+
+        .dark-post-card .btn-primary {
+            background-color: #10a37f;
+            border: none;
+        }
+
+            .dark-post-card .btn-primary:hover {
+                background-color: #0d8f6f;
+            }
+
+        .dark-post-card label {
+            font-size: 0.9rem;
+            color: #cfcfcf;
+        }
+</style>
+
+<div class="card dark-post-card my-4">
+    <div class="card-header">
+        Crear publicación
+    </div>
+
+    <div class="card-body">
+
+        <!-- Mensajes provenientes del POST (TempData) -->
+        @if (TempData["PostError"] is string postErr && !string.IsNullOrWhiteSpace(postErr))
+        {
+            <div class="alert alert-danger mb-3">@postErr</div>
+        }
+        @if (TempData["PostOk"] is string postOk && !string.IsNullOrWhiteSpace(postOk))
+        {
+            <div class="alert alert-success mb-3">@postOk</div>
+        }
+
+        <!-- FORMULARIO CORRECTO -->
+        <form asp-controller="Posts"
+              asp-action="Create"
+              method="post"
+              enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Contenido -->
+            <div class="mb-3">
+                <textarea asp-for="Content"
+                          class="form-control"
+                          placeholder="¿Qué estás pensando?"
+                          rows="3"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="row g-3">
+
+                <!-- Tipo -->
+                <div class="col-md-3">
+                    <label asp-for="MediaType" class="form-label">Tipo</label>
+                    <select asp-for="MediaType" class="form-select">
+                        <option value="@((int)MediaType.Image)">Imagen</option>
+                        <option value="@((int)MediaType.YouTube)">YouTube</option>
+                    </select>
+                    <span asp-validation-for="MediaType" class="text-danger"></span>
+                </div>
+
+                <!-- Imagen -->
+                <div class="col-md-5">
+                    <label asp-for="ImageFile" class="form-label">Imagen</label>
+                    <input asp-for="ImageFile" type="file" class="form-control" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <!-- YouTube -->
+                <div class="col-md-4">
+                    <label asp-for="YouTubeUrl" class="form-label">URL de YouTube</label>
+                    <input asp-for="YouTubeUrl"
+                           class="form-control"
+                           placeholder="https://youtube.com/watch?v=..." />
+                    <span asp-validation-for="YouTubeUrl" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary px-4">
+                    Publicar
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>

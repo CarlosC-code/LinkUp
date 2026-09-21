@@ -1,0 +1,152 @@
+﻿@model RegisterUserViewModel
+
+@{
+    ViewData["Title"] = "Register User";
+    Layout = "_LayoutAnonymous";
+}
+
+<div class="d-flex justify-content-center align-items-center"
+     style="min-height:90vh;background:#1e1e1e;">
+
+    <div class="col-12 col-md-6 col-lg-5">
+
+        <div style="background:#2b2b2b;
+                    border-radius:16px;
+                    box-shadow:0 0 25px rgba(0,0,0,0.6);
+                    overflow:hidden;">
+
+            <!-- Header -->
+            <div style="background:#1f5130;
+                        padding:15px;
+                        text-align:center;
+                        color:#ffffff;">
+                <h5 class="mb-0">Create New Account</h5>
+            </div>
+
+            <div style="padding:30px;">
+
+                @if (ViewBag.HasError != null && ViewBag.HasError)
+                {
+                    <div style="background:#4b1c1c;
+                                    color:#f8d7da;
+                                    border-radius:8px;
+                                    padding:15px;
+                                    margin-bottom:20px;
+                                    position:relative;">
+
+                        @foreach (var error in ViewBag.Errors)
+                        {
+                            <p class="mb-1">@error</p>
+                        }
+
+                        <button type="button"
+                                class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                                data-bs-dismiss="alert">
+                        </button>
+                    </div>
+                }
+
+                <form asp-controller="Login"
+                      asp-action="Register"
+                      method="POST"
+                      enctype="multipart/form-data">
+
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label text-light"></label>
+                        <input asp-for="Name"
+                               class="form-control"
+                               style="background:#1f1f1f;border:1px solid #3a3a3a;color:#fff;" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <!-- LastName -->
+                    <div class="mb-3">
+                        <label asp-for="LastName" class="form-label text-light"></label>
+                        <input asp-for="LastName"
+                               class="form-control"
+                               style="background:#1f1f1f;border:1px solid #3a3a3a;color:#fff;" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label text-light"></label>
+                        <input asp-for="Email"
+                               class="form-control"
+                               style="background:#1f1f1f;border:1px solid #3a3a3a;color:#fff;" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label asp-for="UserName" class="form-label text-light"></label>
+                        <input asp-for="UserName"
+                               class="form-control"
+                               style="background:#1f1f1f;border:1px solid #3a3a3a;color:#fff;" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label text-light"></label>
+                        <input asp-for="Password"
+                               type="password"
+                               class="form-control"
+                               style="background:#1f1f1f;border:1px solid #3a3a3a;color:#fff;" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label text-light"></label>
+                        <input asp-for="ConfirmPassword"
+                               type="password"
+                               class="form-control"
+                               style="background:#1f1f1f;border:1px solid #3a3a3a;color:#fff;" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="mb-3">
+                        <label asp-for="Phone" class="form-label text-light"></label>
+                        <input asp-for="Phone"
+                               class="form-control"
+                               style="background:#1f1f1f;border:1px solid #3a3a3a;color:#fff;" />
+                    </div>
+
+                    <!-- Profile Image -->
+                    <div class="mb-4">
+                        <label asp-for="ProfileImageFile" class="form-label text-light"></label>
+                        <input asp-for="ProfileImageFile"
+                               type="file"
+                               class="form-control"
+                               style="background:#1f1f1f;border:1px solid #3a3a3a;color:#fff;" />
+                        <span asp-validation-for="ProfileImageFile" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+
+                        <a asp-controller="Login"
+                           asp-action="Index"
+                           class="btn btn-outline-light">
+                            <i class="bi bi-arrow-left-short"></i> Back
+                        </a>
+
+                        <button type="submit"
+                                class="btn"
+                                style="background:#4da6ff;color:white;">
+                            <i class="bi bi-person-plus"></i> Register
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

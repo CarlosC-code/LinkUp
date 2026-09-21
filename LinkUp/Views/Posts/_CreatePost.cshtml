@@ -1,0 +1,54 @@
+﻿@* @model SavePostViewModel
+@using LinkUp.Core.Domain.Common.Enums
+
+<form asp-action="Create" asp-controller="Posts" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-2">
+        <textarea asp-for="Content" class="form-control" rows="2" placeholder="¿Qué estás pensando?"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label class="form-label">Tipo de contenido</label>
+        <select asp-for="MediaType" class="form-select" id="mediaTypeSelect">
+            <option value="@((int)MediaType.Image)">Imagen</option>
+            <option value="@((int)MediaType.YouTube)">YouTube</option>
+        </select>
+    </div>
+
+    <div class="mb-2" id="imageGroup">
+        <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2" id="youtubeGroup" style="display:none">
+        <input asp-for="YouTubeUrl" class="form-control" placeholder="https://youtube.com/watch?v=..." />
+        <span asp-validation-for="YouTubeUrl" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-primary">Publicar</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const select = document.getElementById('mediaTypeSelect');
+            const imageGroup = document.getElementById('imageGroup');
+            const youtubeGroup = document.getElementById('youtubeGroup');
+
+            function toggle() {
+                if (select.value === '@((int)MediaType.Image)') {
+                    imageGroup.style.display = '';
+                    youtubeGroup.style.display = 'none';
+                } else {
+                    imageGroup.style.display = 'none';
+                    youtubeGroup.style.display = '';
+                }
+            }
+            select.addEventListener('change', toggle);
+            toggle();
+        })();
+    </script> *@
+@* } *@

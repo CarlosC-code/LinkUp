@@ -1,0 +1,74 @@
+﻿@model LinkUp.Core.Application.ViewModels.Social.CommentThreadViewModel
+<div class="d-flex mb-3">
+    <!-- Avatar -->
+    <div class="me-2"
+         style="width:32px;height:32px;border-radius:50%;
+                overflow:hidden;background:#2a1f4d;
+                display:flex;align-items:center;justify-content:center;">
+        @if (!string.IsNullOrEmpty(Model.UserProfileImage))
+        {
+            <img src="@Model.UserProfileImage" alt="avatar" class="w-100 h-100" />
+        }
+        else
+        {
+            <i class="bi bi-person-fill" style="color:#a78bfa;font-size:0.9rem;"></i>
+        }
+    </div>
+    <div class="flex-grow-1">
+        <!-- Burbuja -->
+        <div style="background:#1f1f2e;
+                    border:1px solid #312e81;
+                    border-radius:12px;
+                    padding:10px 12px;
+                    box-shadow:0 0 10px rgba(124,58,237,0.15);">
+            <strong style="color:#c4b5fd;">
+                @Model.UserName
+            </strong>
+            <div style="color:#e5e7eb;">
+                @Model.Text
+            </div>
+            <small style="color:#9ca3af;">
+                @Model.CreatedAtUtc.ToLocalTime()
+            </small>
+            @* BOTONES SOLO SI ES MÍO *@
+            @if (Model.IsOwner)
+            {
+                <div class="mt-2 d-flex gap-2">
+                    <a asp-controller="Comments" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">
+                        Editar
+                    </a>
+                    <a asp-controller="Comments" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-danger">
+                        Eliminar
+                    </a>
+                </div>
+            }
+        </div>
+        <!-- Responder -->
+        <form asp-controller="Comments" asp-action="Create" method="post" class="mt-2">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="postId" value="@ViewContext.ViewData["PostId"]" />
+            <input type="hidden" name="parentCommentId" value="@Model.Id" />
+            <div class="input-group input-group-sm">
+                <input name="text"
+                       class="form-control"
+                       placeholder="Responder..."
+                       style="background:#181825;border:1px solid #312e81;color:white;" />
+                <button type="submit" class="btn" style="background:#7c3aed;color:white;border:none;">Enviar</button>
+            </div>
+        </form>
+        <!-- Respuestas -->
+        @if (Model.Replies?.Any() == true)
+        {
+            <div class="ms-4 mt-3" style="border-left:2px solid #312e81;padding-left:12px;">
+                @foreach (var r in Model.Replies)
+                {
+                    @Html.Partial(
+                    "~/Views/Shared/_CommentThread.cshtml",
+                        r,
+                        ViewData
+                        )
+                        }
+            </div>
+        }
+    </div>
+</div>

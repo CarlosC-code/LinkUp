@@ -1,0 +1,123 @@
+﻿@using LinkUp.Core.Application.ViewModels.User
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Login Page";
+    Layout = "_LayoutAnonymous";
+}
+
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center"
+     style="background:linear-gradient(135deg,#141414,#1e1b2e,#2a1f4d);">
+
+    <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+
+        <div style="background:#1f1f2e;
+                    border-radius:18px;
+                    box-shadow:0 0 40px rgba(124,58,237,0.35);
+                    backdrop-filter:blur(8px);">
+
+            <div class="p-5">
+
+                <!-- Logo / Título -->
+                <div class="text-center mb-4">
+                    <h2 style="color:#7c3aed;
+                               font-weight:bold;
+                               letter-spacing:1px;">
+                        LinkUp
+                    </h2>
+
+                    <p style="color:#9ca3af;
+                              font-size:0.9rem;">
+                        Connect with your world
+                    </p>
+                </div>
+
+                @Html.ValidationSummary(false, "",
+                new { @class = "text-danger text-center mb-3" })
+
+                <form asp-controller="Login"
+                      asp-action="Index"
+                      method="POST">
+
+                    <!-- Username -->
+                    <div class="form-floating mb-3">
+                        <input asp-for="UserName"
+                               class="form-control"
+                               placeholder="Username"
+                               style="background:#181825;
+                                      border:1px solid #312e81;
+                                      color:#ffffff;" />
+                        <label asp-for="UserName"
+                               style="color:#a5b4fc;">
+                            Username
+                        </label>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-floating mb-4">
+                        <input asp-for="Password"
+                               type="password"
+                               class="form-control"
+                               placeholder="Password"
+                               style="background:#181825;
+                                      border:1px solid #312e81;
+                                      color:#ffffff;" />
+                        <label asp-for="Password"
+                               style="color:#a5b4fc;">
+                            Password
+                        </label>
+                    </div>
+
+                    <!-- Botón Login -->
+                    <div class="d-grid mb-3">
+                        <button type="submit"
+                                class="btn fw-semibold"
+                                style="background:linear-gradient(90deg,#7c3aed,#5b21b6);
+                                       color:white;
+                                       border:none;
+                                       border-radius:8px;">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>
+                            Log In
+                        </button>
+                    </div>
+
+                    <!-- Forgot password -->
+                    <div class="text-center mb-3">
+                        <a asp-controller="Login"
+                           asp-action="ForgotPassword"
+                           style="color:#c084fc;
+                                  text-decoration:none;
+                                  font-size:0.85rem;">
+                            Forgot your password?
+                        </a>
+                    </div>
+
+                    <hr style="border-color:#312e81;">
+
+                    <!-- Register -->
+                    <div class="d-grid mt-3">
+                        <a asp-controller="Login"
+                           asp-action="Register"
+                           class="btn"
+                           style="border:1px solid #7c3aed;
+                                  color:#c084fc;">
+                            <i class="bi bi-person-plus me-1"></i>
+                            Create new account
+                        </a>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-4"
+             style="color:#6b7280;font-size:0.8rem;">
+            © 2026 LinkUp · All rights reserved
+        </div>
+
+    </div>
+
+</div>

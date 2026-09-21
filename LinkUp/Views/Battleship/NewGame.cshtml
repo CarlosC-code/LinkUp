@@ -1,0 +1,49 @@
+﻿@model LinkUp.Core.Application.ViewModels.Battleship.NewGameViewModel
+@{
+    ViewData["Title"] = "Nueva partida";
+}
+<div class="container py-3">
+    <h3>Nueva partida</h3>
+
+    <form method="get" class="mb-3">
+        <div class="input-group">
+            <input asp-for="Search" class="form-control" placeholder="Buscar amigo..." />
+            <button class="btn btn-outline-secondary">Buscar</button>
+        </div>
+    </form>
+
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <ul class="list-group mb-3">
+            @if (!Model.Friends.Any())
+            {
+                <li class="list-group-item text-muted">No hay amigos disponibles para seleccionar.</li>
+            }
+            else
+            {
+                @foreach (var f in Model.Friends)
+                {
+                    <label class="list-group-item d-flex align-items-center gap-3">
+                        <input type="radio" name="SelectedFriendUserId" value="@f.UserId" class="form-check-input me-1" />
+                        <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#e9ecef;">
+                            @if (!string.IsNullOrEmpty(f.ProfileImage))
+                            {
+                                @f.ProfileImage
+                            }
+                            else
+                            {
+                                <span class="text-muted">?</span>
+                            }
+                        </div>
+                        <span><strong>@f.UserName</strong></span>
+                    </label>
+                }
+            }
+        </ul>
+
+        <div class="d-flex gap-2">
+            IndexVolver atrás</a>
+            <button type="submit" class="btn btn-primary">Iniciar partida</button>
+        </div>
+    </form>
+</div>

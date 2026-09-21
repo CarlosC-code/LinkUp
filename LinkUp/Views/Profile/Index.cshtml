@@ -1,0 +1,127 @@
+﻿@model LinkUp.Core.Application.ViewModels.Social.ProfileEditViewModel
+
+@{
+    ViewData["Title"] = "Mi Perfil";
+}
+
+<div class="container py-4">
+
+    <div style="background:#2b2b2b;
+                padding:30px;
+                border-radius:12px;
+                box-shadow:0 0 15px rgba(0,0,0,0.4);">
+
+        <h2 class="mb-4" style="color:#ffffff;">Mi Perfil</h2>
+
+        @if (TempData["msg"] is string msg && !string.IsNullOrWhiteSpace(msg))
+        {
+            <div style="background:#1f5130;
+                            color:#d4edda;
+                            padding:10px;
+                            border-radius:8px;
+                            margin-bottom:15px;">
+                @msg
+            </div>
+        }
+
+        <form asp-action="Index" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row g-3">
+
+                <!-- Nombre -->
+                <div class="col-md-6">
+                    <label asp-for="FirstName" class="form-label text-light"></label>
+                    <input asp-for="FirstName" class="form-control bg-dark text-light border-secondary" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <!-- Apellido -->
+                <div class="col-md-6">
+                    <label asp-for="LastName" class="form-label text-light"></label>
+                    <input asp-for="LastName" class="form-control bg-dark text-light border-secondary" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <!-- Teléfono -->
+                <div class="col-md-6">
+                    <label asp-for="Phone" class="form-label text-light"></label>
+                    <input asp-for="Phone" class="form-control bg-dark text-light border-secondary"
+                           placeholder="809-555-1234" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <!-- Imagen de perfil -->
+                <div class="col-md-6">
+                    <label asp-for="ProfileImage" class="form-label text-light"></label>
+                    <input asp-for="ProfileImage" type="file"
+                           class="form-control bg-dark text-light border-secondary" />
+                    <span asp-validation-for="ProfileImage" class="text-danger"></span>
+
+                    <!-- Mantener imagen actual -->
+                    <input type="hidden" asp-for="ExistingImagePath" />
+                </div>
+
+                <!-- Mostrar imagen actual -->
+                @if (!string.IsNullOrEmpty(Model.ExistingImagePath))
+                {
+                    <div class="col-12">
+                        <label class="form-label text-light">Foto actual</label>
+                        <div class="mb-2">
+                            <img src="@Model.ExistingImagePath"
+                                 alt="Foto de perfil"
+                                 class="img-thumbnail"
+                                 style="max-width:160px;
+                                            background:#1e1e1e;
+                                            border:1px solid #444;" />
+                        </div>
+                    </div>
+                }
+
+                <hr class="mt-4" style="border-color:#444;" />
+
+                <!-- Contraseñas -->
+                <h5 class="text-light mt-3">Cambiar contraseña (opcional)</h5>
+
+                <div class="col-md-6">
+                    <label asp-for="NewPassword" class="form-label text-light"></label>
+                    <input asp-for="NewPassword" type="password"
+                           class="form-control bg-dark text-light border-secondary" />
+                    <span asp-validation-for="NewPassword" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ConfirmPassword" class="form-label text-light"></label>
+                    <input asp-for="ConfirmPassword" type="password"
+                           class="form-control bg-dark text-light border-secondary" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <!-- Botones -->
+            <div class="mt-4 d-flex gap-2">
+
+                <a asp-controller="Posts"
+                   asp-action="Index"
+                   class="btn btn-outline-light">
+                    Volver
+                </a>
+
+                <button type="submit"
+                        class="btn"
+                        style="background:#4da6ff;color:white;">
+                    Guardar cambios
+                </button>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

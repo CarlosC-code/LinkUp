@@ -1,0 +1,43 @@
+﻿@model LinkUp.Core.Application.ViewModels.Battleship.PlaceOnBoardViewModel
+@{
+    ViewData["Title"] = "Seleccionar celda";
+}
+
+<div class="container py-3">
+    <h3>Selecciona la celda inicial (barco de @Model.SelectedShipLength)</h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <tbody>
+                @for (int r = 0; r < 12; r++)
+                {
+                    <tr>
+                        @for (int c = 0; c < 12; c++)
+                        {
+                            var cell = Model.Board.First(x => x.Row == r && x.Col == c);
+                            <td style="width:32px;height:32px;">
+                                @if (!cell.IsSelectable)
+                                {
+                                    <div class="bg-secondary" style="width:100%;height:100%;opacity:.5;"></div>
+                                }
+                                else
+                                {
+                                    <form asp-action="ChooseDirection" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="gameId" value="@Model.GameId" />
+                                        <input type="hidden" name="shipLength" value="@Model.SelectedShipLength" />
+                                        <input type="hidden" name="row" value="@r" />
+                                        <input type="hidden" name="col" value="@c" />
+                                        <button type="submit" class="btn btn-link p-0" style="width:100%;height:100%;">&nbsp;</button>
+                                    </form>
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <a asp-action="SelectShip" class="btn btn-secondary mt-2">Volver</a>
+</div>

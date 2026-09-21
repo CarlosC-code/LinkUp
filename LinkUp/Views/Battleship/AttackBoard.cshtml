@@ -1,0 +1,62 @@
+﻿@model LinkUp.Core.Application.ViewModels.Battleship.AttackBoardViewModel
+@{
+    ViewData["Title"] = "Tablero de ataque";
+}
+
+<div class="container py-3">
+    <h3>Tablero de ataque</h3>
+
+    @if (!string.IsNullOrEmpty(TempData["Error"] as string))
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    @if (!Model.IsMyTurn)
+    {
+        <div class="alert alert-warning">@Model.TurnMessage</div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <tbody>
+                @for (int r = 0; r < 12; r++)
+                {
+                    <tr>
+                        @for (int c = 0; c < 12; c++)
+                        {
+                            var cell = Model.Board.First(x => x.Row == r && x.Col == c);
+                            var cls = cell.IsHit.HasValue ? (cell.IsHit.Value ? "bg-danger" : "bg-success") : "";
+                            <td class="@cls" style="width:32px;height:32px;">
+                                @if (Model.IsMyTurn && !cell.IsHit.HasValue)
+                                {
+                                    <form asp-action="Attack" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="gameId" value="@Model.GameId" />
+                                        <input type="hidden" name="row" value="@r" />
+                                        <input type="hidden" name="col" value="@c" />
+                                        <button type="submit" class="btn btn-link p-0" style="width:100%;height:100%;">&nbsp;</button>
+                                    </form>
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+   
+<div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary"
+       asp-action="AttackBoard"
+       asp-route-gameId="@Model.GameId">Refrescar pantalla</a>
+
+    <a class="btn btn-outline-secondary"
+       asp-action="Index">Volver atrás</a>
+
+    <a class="btn btn-outline-danger"
+       asp-action="ConfirmSurrender"
+       asp-route-gameId="@Model.GameId">Rendirse</a>
+</div>
+
+</div>

@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Eliminar amigo";
+}
+
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center"
+     style="background:#0f172a;">
+
+    <div class="container col-12 col-md-8 col-lg-5">
+
+        <div class="card border-0 shadow-lg rounded-4"
+             style="background:#111827; border:1px solid #312e81;">
+
+            <div class="card-body text-center p-5 text-light">
+
+                <!-- Icono advertencia -->
+                <div class="mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                         style="width:90px; height:90px; background:rgba(147,51,234,0.15);">
+                        <i class="bi bi-person-x fs-1" style="color:#c084fc;"></i>
+                    </div>
+                </div>
+
+                <!-- Mensaje -->
+                <h4 class="fw-bold mb-3" style="color:#e5e7eb;">
+                    ¿Eliminar a <span style="color:#c084fc;">@ViewBag.FriendUserName</span>?
+                </h4>
+
+                <p class="small mb-4" style="color:#9ca3af;">
+                    Esta acción eliminará a este usuario de tu lista de amigos.
+                    Podrás volver a agregarlo enviando una nueva solicitud.
+                </p>
+
+                <!-- Botones -->
+                <div class="d-grid gap-3">
+
+                    <!-- Confirmar -->
+                    <form asp-action="RemoveConfirmed" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="friendUserId" value="@ViewBag.FriendUserId" />
+                        <button type="submit"
+                                class="btn fw-semibold rounded-3 py-2"
+                                style="background:linear-gradient(135deg,#9333ea,#7e22ce);
+                                       color:white;
+                                       border:none;
+                                       box-shadow:0 0 15px rgba(147,51,234,0.5);
+                                       transition:0.3s;">
+                            <i class="bi bi-trash3-fill me-1"></i>
+                            Eliminar amigo
+                        </button>
+                    </form>
+
+                    <!-- Cancelar -->
+                    <a asp-action="Index"
+                       class="btn fw-semibold rounded-3 py-2"
+                       style="background:#1f2937;
+                              color:#e5e7eb;
+                              border:1px solid #312e81;
+                              transition:0.3s;">
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

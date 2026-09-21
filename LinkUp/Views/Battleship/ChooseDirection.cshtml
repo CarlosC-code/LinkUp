@@ -1,0 +1,34 @@
+﻿@model LinkUp.Core.Application.ViewModels.Battleship.ChooseDirectionViewModel
+@{
+    ViewData["Title"] = "Elegir dirección";
+}
+
+<div class="container py-3">
+    <h3>Elegir dirección</h3>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+
+    <form asp-action="Place" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="gameId" value="@Model.GameId" />
+        <input type="hidden" name="shipLength" value="@Model.ShipLength" />
+        <input type="hidden" name="startRow" value="@Model.StartRow" />
+        <input type="hidden" name="startCol" value="@Model.StartCol" />
+
+        <select name="direction" class="form-select mb-3">
+            <option value="1">Arriba</option>
+            <option value="2">Abajo</option>
+            <option value="3">Izquierda</option>
+            <option value="4">Derecha</option>
+        </select>
+
+        <div class="d-flex gap-2">
+            <a asp-action="BackToBoard" class="btn btn-secondary">Volver</a>
+            <button type="submit" class="btn btn-primary">Posicionar</button>
+        </div>
+    </form>
+</div>

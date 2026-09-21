@@ -1,0 +1,21 @@
+﻿@model LinkUp.Core.Application.ViewModels.Social.CommentEditViewModel
+@{
+    ViewData["Title"] = "Eliminar comentario";
+}
+<div class="container py-3">
+    <h3>¿Eliminar este comentario?</h3>
+    <div class="card my-3">
+        <div class="card-body">
+            <p>@Model.Text</p>
+        </div>
+    </div>
+    <form asp-controller="Comments" asp-action="Delete" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.Id" />
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+

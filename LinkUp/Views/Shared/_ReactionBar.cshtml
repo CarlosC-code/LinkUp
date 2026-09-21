@@ -1,0 +1,92 @@
+﻿@model LinkUp.Core.Application.ViewModels.Social.PostItemViewModel
+
+<style>
+    .dark-reactions .btn-outline-primary {
+        border-color: #10a37f;
+        color: #10a37f;
+    }
+
+        .dark-reactions .btn-outline-primary:hover {
+            background-color: #10a37f;
+            color: white;
+        }
+
+    .dark-reactions .btn-outline-danger:hover {
+        background-color: #b02a37;
+        color: white;
+    }
+
+    .dark-reactions .btn-outline-secondary {
+        border-color: #555;
+        color: #ccc;
+    }
+
+        .dark-reactions .btn-outline-secondary:hover {
+            background-color: #444;
+            color: white;
+        }
+
+    .dark-reactions .badge {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+
+    .dark-reactions .text-muted {
+        color: #aaaaaa !important;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="d-flex align-items-center gap-2 flex-wrap dark-reactions">
+
+    <!-- Me gusta -->
+    <form asp-action="Add" method="post" class="d-inline">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="postId" value="@Model.Id" />
+        <input type="hidden" name="type" value="1" />
+
+        @if (Model.MyReaction == 1)
+        {
+            <span class="badge bg-primary">👍 Me gusta</span>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-sm btn-outline-primary">
+                👍 Me gusta
+            </button>
+        }
+    </form>
+
+    <!-- No me gusta -->
+    <form asp-action="Add" method="post" class="d-inline">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="postId" value="@Model.Id" />
+        <input type="hidden" name="type" value="2" />
+
+        @if (Model.MyReaction == 2)
+        {
+            <span class="badge bg-danger">👎 No me gusta</span>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-sm btn-outline-danger">
+                👎 No me gusta
+            </button>
+        }
+    </form>
+
+    <!-- Quitar reacción -->
+    <form asp-action="Remove" method="post" class="d-inline">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="postId" value="@Model.Id" />
+
+        <button type="submit" class="btn btn-sm btn-outline-secondary">
+            Quitar reacción
+        </button>
+    </form>
+
+    <span class="text-muted ms-2">
+        👍 @Model.Likes · 👎 @Model.Dislikes
+    </span>
+
+</div>

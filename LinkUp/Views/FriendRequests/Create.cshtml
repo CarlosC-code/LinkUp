@@ -1,0 +1,131 @@
+﻿@model LinkUp.Core.Application.ViewModels.Social.FriendRequestCreateViewModel
+@{
+    ViewData["Title"] = "Nueva solicitud de amistad";
+}
+
+<style>
+    body {
+        background-color: #212121; /* similar al fondo de ChatGPT */
+        color: #e0e0e0;
+    }
+
+    .dark-card {
+        background-color: #2a2a2a;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    .form-control {
+        background-color: #333;
+        border: 1px solid #444;
+        color: #fff;
+    }
+
+        .form-control:focus {
+            background-color: #333;
+            color: #fff;
+            border-color: #666;
+            box-shadow: none;
+        }
+
+    .list-group-item {
+        background-color: #2f2f2f;
+        border: 1px solid #3a3a3a;
+        color: #e0e0e0;
+    }
+
+        .list-group-item:hover {
+            background-color: #383838;
+            cursor: pointer;
+        }
+
+    .text-muted {
+        color: #aaaaaa !important;
+    }
+
+    .btn-outline-secondary {
+        border-color: #555;
+        color: #ddd;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #444;
+            color: white;
+        }
+
+    .btn-primary {
+        background-color: #10a37f; /* verde tipo ChatGPT */
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0d8f6f;
+        }
+
+    .btn-secondary {
+        background-color: #444;
+        border: none;
+    }
+
+        .btn-secondary:hover {
+            background-color: #555;
+        }
+</style>
+
+<div class="container py-5">
+    <div class="dark-card">
+
+        <h3 class="mb-4">Enviar solicitud de amistad</h3>
+
+        <!-- Buscador -->
+        <form method="get" class="mb-4">
+            <div class="input-group">
+                <input asp-for="Search" class="form-control" placeholder="Buscar usuario..." />
+                <button class="btn btn-outline-secondary">Buscar</button>
+            </div>
+        </form>
+
+        <!-- Lista de usuarios -->
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <ul class="list-group mb-4">
+                @foreach (var u in Model.Candidates)
+                {
+                    <label class="list-group-item d-flex align-items-center">
+                        <input type="radio" name="TargetUserId" value="@u.UserId" class="form-check-input me-3" />
+                        <div>
+                            <strong>@u.UserName</strong>
+                            <div class="small text-muted">
+                                @u.MutualFriends amigos en común
+                            </div>
+                        </div>
+                    </label>
+                }
+
+                @if (!Model.Candidates.Any())
+                {
+                    <li class="list-group-item text-muted">
+                        No hay usuarios disponibles.
+                    </li>
+                }
+            </ul>
+
+            <!-- Botones -->
+            <div class="d-flex gap-2">
+                <a asp-action="Index" class="btn btn-secondary">
+                    Volver
+                </a>
+
+                <button class="btn btn-primary" type="submit">
+                    Enviar solicitud
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>

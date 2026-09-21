@@ -1,0 +1,27 @@
+﻿@model LinkUp.Core.Application.ViewModels.Battleship.ShipSelectionViewModel
+@{
+    ViewData["Title"] = "Seleccionar barco";
+}
+<div class="container py-3">
+    <h3>Seleccionar barco</h3>
+    <p>Te faltan @Model.RemainingShips.Count barcos por colocar.</p>
+
+    <form method="post" asp-action="SelectShip">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="gameId" value="@Model.GameId" />
+        <ul class="list-group mb-3">
+            @foreach (var l in Model.RemainingShips)
+            {
+                <label class="list-group-item d-flex align-items-center">
+                    <input type="radio" class="form-check-input me-2" name="selectedShip" value="@l" />
+                    Barco de @l posiciones
+                </label>
+            }
+        </ul>
+
+        <div class="d-flex gap-2">
+            <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+            <button type="submit" class="btn btn-primary">Posicionar barco</button>
+        </div>
+    </form>
+</div>

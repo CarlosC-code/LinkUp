@@ -1,0 +1,30 @@
+﻿@model LinkUp.Core.Application.ViewModels.Battleship.GameResultViewModel
+@{
+    ViewData["Title"] = "Resultado";
+}
+<div class="container py-3">
+    <h3>Resultado vs @Model.OpponentUserName</h3>
+    <div class="mb-2">
+        <span class="badge @(Model.IsWinner ? "bg-success" : "bg-danger")">
+            @(Model.IsWinner ? "Ganaste" : "Perdiste")
+        </span>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Mi tablero de ataque</h5>
+            @await Html.PartialAsync("_BoardReadonly", Model.MyAttackBoard)
+        </div>
+        <div class="col-md-6">
+            <h5>Tablero de ataque del otro jugador</h5>
+            @await Html.PartialAsync("_BoardReadonly", Model.OpponentAttackBoard)
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <h5>Mi posicionamiento</h5>
+        @await Html.PartialAsync("_BoardPlacementReadonly", Model.MyPlacementBoard)
+    </div>
+
+    IndexVolver atrás</a>
+</div>

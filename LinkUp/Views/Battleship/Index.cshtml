@@ -1,0 +1,124 @@
+﻿@model LinkUp.Core.Application.ViewModels.Battleship.BattleshipIndexViewModel
+@{
+    ViewData["Title"] = "Battleship";
+}
+
+<div class="container py-3">
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Battleship</h2>
+
+        <a asp-action="NewGame" class="btn btn-primary">Iniciar nueva partida</a>
+    </div>
+
+    <h4 class="mt-4">Partidas activas</h4>
+
+    <ul class="list-group mb-4">
+        @if (!Model.ActiveGames.Any())
+        {
+            <li class="list-group-item text-muted">
+                No tienes partidas activas.
+            </li>
+        }
+        else
+        {
+            @foreach (var g in Model.ActiveGames)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#e9ecef;">
+                            @if (!string.IsNullOrEmpty(g.OpponentProfileImage))
+                            {
+                                <img src="@g.OpponentProfileImage" class="w-100 h-100" alt="avatar" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">?</span>
+                            }
+                        </div>
+
+                        <div>
+                            <strong>@g.OpponentUserName</strong>
+
+                            <div class="small text-muted">
+                                Iniciada @g.StartedAtUtc.ToLocalTime() ·
+                                @(Math.Round(g.Hours, 1)) h
+
+                                @if (g.IsMyTurn)
+                                {
+                                    <span class="badge bg-info ms-2">
+                                        Tu turno
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a asp-action="AttackBoard" asp-route-gameId="@g.GameId" class="btn btn-sm btn-primary">
+                            Entrar
+                        </a>
+                        <a asp-action="ConfirmSurrender" asp-route-gameId="@g.GameId" class="btn btn-sm btn-danger">
+                            Finalizar (rendirse)
+                        </a>
+                    </div>
+
+                </li>
+            }
+        }
+    </ul>
+
+    <h4>Historial</h4>
+
+    <div class="mb-2">
+        <span class="badge bg-secondary">
+            Jugadas: @Model.TotalPlayed
+        </span>
+        <span class="badge bg-success">
+            Ganadas: @Model.Won
+        </span>
+        <span class="badge bg-danger">
+            Perdidas: @Model.Lost
+        </span>
+    </div>
+
+    <ul class="list-group">
+        @if (!Model.History.Any())
+        {
+            <li class="list-group-item text-muted">
+                Aún no tienes historial.
+            </li>
+        }
+        else
+        {
+            @foreach (var h in Model.History)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <strong>@h.OpponentUserName</strong>
+
+                        <div class="small text-muted">
+                            Inicio: @h.StartedAtUtc.ToLocalTime() ·
+                            Fin: @h.FinishedAtUtc.ToLocalTime() ·
+                            @(Math.Round(h.DurationHours, 1)) h
+                        </div>
+
+                        <span class="badge @(h.IsWinner ? "bg-success" : "bg-danger")">
+                            @(h.IsWinner ? "Ganada" : "Perdida")
+                        </span>
+                    </div>
+
+                    <a asp-action="Result" asp-route-gameId="@h.GameId" class="btn btn-sm btn-secondary">
+                        Ver resultado
+                    </a>
+
+                </li>
+            }
+        }
+    </ul>
+
+</div>

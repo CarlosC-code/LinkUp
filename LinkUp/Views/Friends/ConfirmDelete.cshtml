@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Eliminar amigo";
+    var friendshipId = (int)ViewBag.FriendshipId;
+    var friendUserId = (string)ViewBag.FriendUserId;
+}
+
+<h4>Eliminar amigo</h4>
+
+<p>
+    ¿Está seguro que desea eliminar a
+    <strong>@friendUserId</strong>
+    de sus amigos?
+</p>
+
+<form asp-controller="Friends"
+      asp-action="Delete"
+      method="post">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden"
+           name="id"
+           value="@friendshipId" />
+
+    <button type="submit"
+            class="btn btn-danger me-2">
+        Eliminar
+    </button>
+
+    <a asp-controller="Friends"
+       asp-action="Index"
+       class="btn btn-secondary">
+        Cancelar
+    </a>
+
+</form>

@@ -1,0 +1,55 @@
+﻿@model string
+
+@{
+    ViewData["Title"] = "Confirmation";
+    Layout = "_LayoutAnonymous";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height:70vh;">
+
+    <div class="col-12 col-md-5">
+        <div style="background:#2b2b2b;
+                    border-radius:12px;
+                    box-shadow:0 0 20px rgba(0,0,0,0.5);
+                    overflow:hidden;">
+
+            <div style="background:#1f5130;
+                        padding:15px;
+                        text-align:center;
+                        color:#ffffff;">
+                <h5 class="mb-0">Confirmation message</h5>
+            </div>
+
+            <div style="padding:25px;">
+
+                <div style="background:#1e293b;
+                            border-radius:10px;
+                            padding:20px;
+                            color:#e4e4e4;
+                            position:relative;">
+
+                    <h4 class="mb-3">
+                        @Model
+                    </h4>
+
+                    <a class="btn"
+                       asp-controller="Login"
+                       asp-action="Index"
+                       style="background:#4da6ff;color:white;">
+                        Sign in
+                    </a>
+
+                    <button type="button"
+                            class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                            data-bs-dismiss="alert"
+                            aria-label="close">
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
